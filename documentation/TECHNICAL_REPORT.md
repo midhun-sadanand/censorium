@@ -438,23 +438,23 @@ output_dir/
 
 **Verification Results (Current Dataset):**
 ```
-✅ DATASET VERIFICATION PASSED!
+ DATASET VERIFICATION PASSED!
 
 TRAIN:
-  ✅ All images are 512x512 (20,943/20,943)
-  ✅ All labels are valid (20,943/20,943)
-  ✅ 21,824 annotations found (1.04 per image)
-  ✅ Good brightness variation (std dev: 18.51)
+ All images are 512x512 (20,943/20,943)
+ All labels are valid (20,943/20,943)
+ 21,824 annotations found (1.04 per image)
+ Good brightness variation (std dev: 18.51)
 
 VALID:
-  ✅ All images are 512x512 (2,048/2,048)
-  ✅ All labels are valid (2,048/2,048)
-  ✅ 2,147 annotations found (1.05 per image)
+ All images are 512x512 (2,048/2,048)
+ All labels are valid (2,048/2,048)
+ 2,147 annotations found (1.05 per image)
 
 TEST:
-  ✅ All images are 512x512 (1,020/1,020)
-  ✅ All labels are valid (1,020/1,020)
-  ✅ 1,068 annotations found (1.05 per image)
+ All images are 512x512 (1,020/1,020)
+ All labels are valid (1,020/1,020)
+ 1,068 annotations found (1.05 per image)
 ```
 
 **Usage:**
@@ -562,22 +562,22 @@ Trained Model (97.7% mAP@50)
 ### 4.9 Key Achievements
 
 **Preprocessing Pipeline:**
-- ✅ Complete replication of Roboflow's 4-step preprocessing
-- ✅ Ability to process new raw images locally
-- ✅ Comprehensive verification system
-- ✅ Fully documented and reproducible
+-  Complete replication of Roboflow's 4-step preprocessing
+-  Ability to process new raw images locally
+-  Comprehensive verification system
+-  Fully documented and reproducible
 
 **Training Infrastructure:**
-- ✅ YOLOv8 training pipeline established
-- ✅ Dataset verified and ready
-- ✅ Model downloaded and configured
-- ✅ Training commands documented
+-  YOLOv8 training pipeline established
+-  Dataset verified and ready
+-  Model downloaded and configured
+-  Training commands documented
 
 **Knowledge Transfer:**
-- ✅ Complete understanding of preprocessing steps
-- ✅ Scripts to extend dataset in future
-- ✅ Verification tools for quality control
-- ✅ Reproducible training methodology
+-  Complete understanding of preprocessing steps
+-  Scripts to extend dataset in future
+-  Verification tools for quality control
+-  Reproducible training methodology
 
 ---
 
@@ -753,10 +753,10 @@ Confidence threshold analysis shows:
 
 | System | Face Recall | Plate Recall | Latency | Open Source |
 |--------|-------------|--------------|---------|-------------|
-| Censorium | 0.92 | 0.86 | 145ms | ✓ |
-| Google Cloud Vision | 0.95 | N/A | 200ms* | ✗ |
-| AWS Rekognition | 0.94 | N/A | 180ms* | ✗ |
-| OpenALPR | N/A | 0.91 | 50ms | ✓ |
+| Censorium | 0.92 | 0.86 | 145ms | [OK] |
+| Google Cloud Vision | 0.95 | N/A | 200ms* | [X] |
+| AWS Rekognition | 0.94 | N/A | 180ms* | [X] |
+| OpenALPR | N/A | 0.91 | 50ms | [OK] |
 
 *Network latency not included
 
@@ -811,20 +811,20 @@ Confidence threshold analysis shows:
 Censorium demonstrates that high-accuracy, real-time image redaction is achievable on consumer hardware using modern deep learning techniques. The system's modular architecture, comprehensive API, evaluation tools, and complete training pipeline make it suitable for both research and production deployment.
 
 Key achievements:
-- ✓ >90% face detection recall (92% achieved)
-- ✓ >95% plate detection recall (95.4% achieved with custom training)
-- ✓ <300ms latency on M2 Mac (145ms average for 1080p)
-- ✓ Production-ready REST API with FastAPI
-- ✓ User-friendly web interface with Next.js
-- ✓ Comprehensive evaluation suite
-- ✓ Complete training pipeline with preprocessing replication
-- ✓ Custom trained YOLOv8 model (97.7% mAP@50)
+- [OK] >90% face detection recall (92% achieved)
+- [OK] >95% plate detection recall (95.4% achieved with custom training)
+- [OK] <300ms latency on M2 Mac (145ms average for 1080p)
+- [OK] Production-ready REST API with FastAPI
+- [OK] User-friendly web interface with Next.js
+- [OK] Comprehensive evaluation suite
+- [OK] Complete training pipeline with preprocessing replication
+- [OK] Custom trained YOLOv8 model (97.7% mAP@50)
 
 The system includes not just the inference pipeline but also the complete training infrastructure:
-- ✓ Preprocessing pipeline replicating Roboflow (auto-orient, resize, contrast, augmentation)
-- ✓ Dataset verification system
-- ✓ YOLOv8 training configuration
-- ✓ Comprehensive documentation (1000+ lines)
+- [OK] Preprocessing pipeline replicating Roboflow (auto-orient, resize, contrast, augmentation)
+- [OK] Dataset verification system
+- [OK] YOLOv8 training configuration
+- [OK] Comprehensive documentation (1000+ lines)
 
 The system is ready for deployment in privacy-sensitive applications such as journalism, social media, law enforcement, and research data anonymization. The training pipeline enables future model improvements and dataset extensions.
 
@@ -913,12 +913,12 @@ a.click();
 **Course**: CPSC 580  
 
 **Implementation Status**:
-- ✅ Detection System: Complete
-- ✅ API & Web UI: Complete
-- ✅ Training Pipeline: Complete
-- ✅ Preprocessing Scripts: Complete
-- ✅ Evaluation Tools: Complete
-- ✅ Documentation: Comprehensive (1500+ lines)
+-  Detection System: Complete
+-  API & Web UI: Complete
+-  Training Pipeline: Complete
+-  Preprocessing Scripts: Complete
+-  Evaluation Tools: Complete
+-  Documentation: Comprehensive (1500+ lines)
 
 **Code Repository Structure**:
 ```

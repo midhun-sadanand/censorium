@@ -80,8 +80,8 @@ async def startup_event():
         logger.info("Initializing redaction engine...")
         redaction_engine = RedactionEngine()
         
-        logger.info("✅ All models loaded successfully!")
-        logger.info("✅ Roboflow license plate detector ready!")
+        logger.info("All models loaded successfully!")
+        logger.info("Roboflow license plate detector ready!")
     except Exception as e:
         logger.error(f"Failed to load models: {e}")
         raise

@@ -21,18 +21,18 @@ def test_model_loading():
     try:
         print("\n1. Loading model...")
         detector = LicensePlateDetector()
-        print("   ✅ Model loaded successfully!")
+        print("   Model loaded successfully!")
         print(f"   - Using custom Roboflow model: {detector.is_custom_model}")
         print(f"   - Confidence threshold: {detector.confidence_threshold}")
         
         print("\n2. Creating test image...")
         # Create a dummy test image (blank image for initialization test)
         test_image = np.zeros((640, 640, 3), dtype=np.uint8)
-        print("   ✅ Test image created")
+        print("   Test image created")
         
         print("\n3. Running inference test...")
         bboxes, confidences = detector.detect(test_image)
-        print(f"   ✅ Inference successful!")
+        print(f"   Inference successful!")
         print(f"   - Detections: {len(bboxes)}")
         
         if len(bboxes) > 0:
@@ -43,7 +43,7 @@ def test_model_loading():
             print("   - No license plates detected (expected for blank image)")
         
         print("\n" + "=" * 60)
-        print("✅ ALL TESTS PASSED!")
+        print("ALL TESTS PASSED!")
         print("=" * 60)
         print("\nYour Roboflow model is ready to use!")
         print("Start the API with: uvicorn app.main:app --reload")
@@ -51,13 +51,13 @@ def test_model_loading():
         return True
         
     except FileNotFoundError as e:
-        print(f"\n❌ ERROR: Model file not found")
+        print(f"\nERROR: Model file not found")
         print(f"   {e}")
         print("\nMake sure license_plate.pt is in backend/models/")
         return False
         
     except Exception as e:
-        print(f"\n❌ ERROR: {type(e).__name__}")
+        print(f"\nERROR: {type(e).__name__}")
         print(f"   {e}")
         import traceback
         traceback.print_exc()

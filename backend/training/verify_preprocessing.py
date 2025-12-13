@@ -50,20 +50,20 @@ def verify_image_dimensions(dataset_path: Path, split: str = "train") -> dict:
     print(f"Checked {len(image_files)}/{len(image_files)} images...    ")
     
     # Results
-    print(f"\n✓ Total images: {len(image_files)}")
-    print(f"✓ Dimension distribution:")
+    print(f"\nTotal images: {len(image_files)}")
+    print(f"Dimension distribution:")
     for dim, count in sorted(dimensions.items(), key=lambda x: -x[1]):
         percentage = (count / len(image_files)) * 100
         print(f"  {dim}: {count} ({percentage:.1f}%)")
     
     if invalid_images:
-        print(f"\n⚠ Found {len(invalid_images)} images with non-512x512 dimensions:")
+        print(f"\nWARNING: Found {len(invalid_images)} images with non-512x512 dimensions:")
         for name, dim in invalid_images[:10]:
             print(f"  - {name}: {dim}")
         if len(invalid_images) > 10:
             print(f"  ... and {len(invalid_images) - 10} more")
     else:
-        print(f"\n✅ All images are 512x512!")
+        print(f"\nAll images are 512x512!")
     
     return {
         "total": len(image_files),
@@ -133,32 +133,32 @@ def verify_label_format(dataset_path: Path, split: str = "train", sample_size: i
             invalid_labels.append((img_path.name, str(e)))
     
     # Results
-    print(f"\n✓ Total images: {len(image_files)}")
-    print(f"✓ Images with labels: {label_stats['images_with_labels']}")
-    print(f"✓ Images without labels: {label_stats['images_without_labels']}")
-    print(f"✓ Total annotations: {label_stats['total_annotations']}")
-    print(f"✓ Annotations per image: {label_stats['total_annotations'] / len(image_files):.2f}")
+    print(f"\nTotal images: {len(image_files)}")
+    print(f"Images with labels: {label_stats['images_with_labels']}")
+    print(f"Images without labels: {label_stats['images_without_labels']}")
+    print(f"Total annotations: {label_stats['total_annotations']}")
+    print(f"Annotations per image: {label_stats['total_annotations'] / len(image_files):.2f}")
     
-    print(f"\n✓ Class distribution:")
+    print(f"\nClass distribution:")
     for class_id, count in sorted(label_stats["class_counts"].items()):
         print(f"  Class {class_id}: {count} annotations")
     
     if missing_labels:
-        print(f"\n⚠ Found {len(missing_labels)} missing label files:")
+        print(f"\nWARNING: Found {len(missing_labels)} missing label files:")
         for name in missing_labels[:5]:
             print(f"  - {name}")
         if len(missing_labels) > 5:
             print(f"  ... and {len(missing_labels) - 5} more")
     
     if invalid_labels:
-        print(f"\n⚠ Found {len(invalid_labels)} invalid labels:")
+        print(f"\nWARNING: Found {len(invalid_labels)} invalid labels:")
         for name, reason in invalid_labels[:5]:
             print(f"  - {name}: {reason}")
         if len(invalid_labels) > 5:
             print(f"  ... and {len(invalid_labels) - 5} more")
     
     if not missing_labels and not invalid_labels:
-        print(f"\n✅ All labels are valid!")
+        print(f"\nAll labels are valid!")
     
     return {
         "total_images": len(image_files),
@@ -180,13 +180,13 @@ def verify_dataset_structure(dataset_path: Path) -> dict:
     # Check data.yaml
     data_yaml = dataset_path / "data.yaml"
     if not data_yaml.exists():
-        print(f"❌ data.yaml not found!")
+        print(f"ERROR: data.yaml not found!")
         return {"valid": False}
     
     with open(data_yaml, 'r') as f:
         config = yaml.safe_load(f)
     
-    print(f"\n✓ Dataset configuration:")
+    print(f"\nDataset configuration:")
     print(f"  Classes: {config['nc']}")
     print(f"  Names: {config['names']}")
     
@@ -199,7 +199,7 @@ def verify_dataset_structure(dataset_path: Path) -> dict:
         labels_dir = dataset_path / split / "labels"
         
         if not images_dir.exists() or not labels_dir.exists():
-            print(f"❌ {split} directory not found!")
+            print(f"ERROR: {split} directory not found!")
             split_stats[split] = {"exists": False}
             continue
         
@@ -212,7 +212,7 @@ def verify_dataset_structure(dataset_path: Path) -> dict:
             "num_labels": num_labels
         }
         
-        print(f"\n✓ {split.upper()} split:")
+        print(f"\n{split.upper()} split:")
         print(f"  Images: {num_images}")
         print(f"  Labels: {num_labels}")
     
@@ -250,7 +250,7 @@ def main():
         dataset_path = script_dir / args.dataset_path
     
     if not dataset_path.exists():
-        print(f"❌ Dataset path does not exist: {dataset_path}")
+        print(f"ERROR: Dataset path does not exist: {dataset_path}")
         sys.exit(1)
     
     print(f"\n{'#'*60}")
@@ -262,7 +262,7 @@ def main():
     structure_results = verify_dataset_structure(dataset_path)
     
     if not structure_results["valid"]:
-        print(f"\n❌ Dataset structure is invalid!")
+        print(f"\nERROR: Dataset structure is invalid!")
         sys.exit(1)
     
     # Verify each split
@@ -293,31 +293,31 @@ def main():
         print(f"\n{split.upper()}:")
         
         if results["dimensions"]["all_512x512"]:
-            print(f"  ✅ All images are 512x512")
+            print(f"  All images are 512x512")
         else:
-            print(f"  ❌ Some images have incorrect dimensions")
+            print(f"  ERROR: Some images have incorrect dimensions")
             all_passed = False
         
         if results["labels"]["all_valid"]:
-            print(f"  ✅ All labels are valid")
+            print(f"  All labels are valid")
         else:
-            print(f"  ❌ Some labels are invalid or missing")
+            print(f"  ERROR: Some labels are invalid or missing")
             all_passed = False
         
         if results["labels"]["total_annotations"] > 0:
-            print(f"  ✅ {results['labels']['total_annotations']} annotations found")
+            print(f"  {results['labels']['total_annotations']} annotations found")
         else:
-            print(f"  ⚠ No annotations found")
+            print(f"  WARNING: No annotations found")
     
     if all_passed:
         print(f"\n{'='*60}")
-        print(f"✅ DATASET VERIFICATION PASSED!")
+        print(f"DATASET VERIFICATION PASSED!")
         print(f"{'='*60}")
         print(f"\nYour dataset is ready for training!")
         return 0
     else:
         print(f"\n{'='*60}")
-        print(f"❌ DATASET VERIFICATION FAILED!")
+        print(f"ERROR: DATASET VERIFICATION FAILED!")
         print(f"{'='*60}")
         print(f"\nPlease fix the issues above before training.")
         return 1

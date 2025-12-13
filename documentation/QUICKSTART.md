@@ -1,186 +1,140 @@
-# Censorium Quick Start Guide
+# Custom Training Pipeline - Quick Start Guide
 
-Get Censorium up and running in 5 minutes!
+This guide helps you quickly train a custom YOLOv8 model and compare it with Roboflow's model.
 
 ## Prerequisites
 
-- Python 3.10+
-- Node.js 18+
-- 8GB RAM minimum
+ Dataset extracted at `datasets/license_plates/`  
+ Pretrained model `yolov8n.pt` downloaded  
+ Python environment with ultralytics installed
 
-## Step 1: Start the Backend
+## 5-Minute Quick Start
 
-Open a terminal and run:
+### Step 1: Verify Dataset (30 seconds)
 
 ```bash
-./start_backend.sh
+cd backend/training
+python verify_preprocessing.py
 ```
 
-Or manually:
+Expected output: ` DATASET VERIFICATION PASSED!`
+
+### Step 2: Train Custom Model (2-4 hours on CPU, 20-30 min on GPU)
 
 ```bash
-cd backend
-source venv/bin/activate
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+# Full training (85 epochs, matches Roboflow)
+python train_custom.py --data datasets/license_plates/data.yaml
+
+# OR quick test (1 epoch, ~10 minutes)
+python train_custom.py --data datasets/license_plates/data.yaml --epochs 1 --batch 4
 ```
 
-Wait for "All models loaded successfully!" message (takes ~30 seconds on first run).
+Training outputs:
+- `runs/detect/custom_train/weights/best.pt` - Best model
+- `runs/detect/custom_train/results.png` - Training curves
+- `runs/detect/custom_train/training_summary.json` - Training metrics
 
-## Step 2: Start the Frontend
-
-Open a **new terminal** and run:
+### Step 3: Compare Models (5 minutes)
 
 ```bash
-./start_frontend.sh
+python compare_models.py \
+  --custom runs/detect/custom_train/weights/best.pt \
+  --roboflow ../models/license_plate.pt \
+  --data datasets/license_plates/data.yaml
 ```
 
-Or manually:
+This generates:
+- Comparison metrics (mAP, precision, recall)
+- Speed benchmarks
+- `comparison_results.json` - Full comparison report
+
+### Step 4: Deploy Best Model (30 seconds)
+
+If your custom model is better:
 
 ```bash
-cd frontend
-npm run dev
+python deploy_model.py --model runs/detect/custom_train/weights/best.pt --name custom
 ```
 
-## Step 3: Use the Web Interface
+This copies the model to `../models/license_plate_custom.pt` for use in the application.
 
-1. Open http://localhost:3000 in your browser
-2. Drag and drop an image
-3. Wait for processing (usually <1 second)
-4. Download the redacted result
+## Understanding Results
 
-## Step 4: Try the CLI (Optional)
+### Training Metrics
 
-```bash
-cd backend
-source venv/bin/activate
+Check `runs/detect/custom_train/results.png` for:
+- **Loss curves**: Should decrease over epochs
+- **mAP@50**: Should reach ≥95% (Roboflow baseline: 97.7%)
+- **Precision/Recall**: Should be balanced
 
-# Single image
-python run_redaction.py --input photo.jpg --output redacted.jpg
+### Comparison Results
 
-# Batch process a directory
-python run_redaction.py --input ./photos --output ./redacted --recursive
-```
+The comparison script shows:
+- **mAP@50**: Higher is better (detection accuracy)
+- **Precision**: Higher is better (fewer false positives)
+- **Recall**: Higher is better (fewer missed detections)
+- **Inference Time**: Lower is better (faster processing)
 
-## Testing the API
+### Choosing the Best Model
 
-```bash
-cd backend
-source venv/bin/activate
-python test_api.py
-```
+Use the model with:
+- **Higher mAP@50** (primary metric)
+- **Balanced precision/recall** (not too many false positives or missed detections)
+- **Acceptable speed** (meets <300ms requirement)
 
-With a test image:
+## Common Commands
 
 ```bash
-python test_api.py /path/to/test/image.jpg
+# Resume training from checkpoint
+python train_custom.py --data datasets/license_plates/data.yaml --resume runs/detect/custom_train/weights/last.pt
+
+# Train on GPU
+python train_custom.py --data datasets/license_plates/data.yaml --device cuda --batch 32
+
+# Validate only (no training)
+python train_custom.py --data datasets/license_plates/data.yaml --validate-only --model-path runs/detect/custom_train/weights/best.pt
+
+# Compare with custom confidence threshold
+python compare_models.py --custom best.pt --roboflow ../models/license_plate.pt --data data.yaml --confidence 0.5
 ```
 
 ## Troubleshooting
 
-### "Models not loaded"
-Wait 30-60 seconds after starting backend. First model download takes time.
-
-### Port already in use
-Kill existing process or change port:
+**Out of Memory:**
 ```bash
-# Backend on different port
-python -m uvicorn app.main:app --port 8001
-
-# Frontend on different port
-npm run dev -- -p 3001
+python train_custom.py --data datasets/license_plates/data.yaml --batch 4
 ```
 
-### Out of memory
-Close other applications or reduce image sizes.
-
-### Can't connect frontend to backend
-Check `frontend/.env.local` has correct API URL:
-```
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
-
-## API Examples
-
-### cURL
-
+**Training Too Slow:**
 ```bash
-# Redact image
-curl -X POST http://localhost:8000/redact-image \
-  -F "file=@image.jpg" \
-  -F "mode=blur" \
-  -o redacted.jpg
-
-# Get metadata
-curl -X POST http://localhost:8000/redact-image \
-  -F "file=@image.jpg" \
-  -F "return_metadata=true"
-
-# Batch process
-curl -X POST http://localhost:8000/redact-batch \
-  -F "files=@img1.jpg" \
-  -F "files=@img2.jpg" \
-  -o redacted.zip
+python train_custom.py --data datasets/license_plates/data.yaml --device cuda
 ```
 
-### Python
-
-```python
-import requests
-
-# Redact image
-with open('image.jpg', 'rb') as f:
-    response = requests.post(
-        'http://localhost:8000/redact-image',
-        files={'file': f},
-        data={'mode': 'blur', 'confidence_threshold': 0.5}
-    )
-    
-with open('redacted.jpg', 'wb') as f:
-    f.write(response.content)
-```
-
-### JavaScript
-
-```javascript
-const formData = new FormData();
-formData.append('file', fileInput.files[0]);
-formData.append('mode', 'blur');
-
-const response = await fetch('http://localhost:8000/redact-image', {
-  method: 'POST',
-  body: formData
-});
-
-const blob = await response.blob();
-const url = URL.createObjectURL(blob);
-```
+**Model Not Improving:**
+- Check dataset: `python verify_preprocessing.py`
+- Try more epochs: `--epochs 100`
+- Check learning rate (YOLOv8 auto-adjusts)
 
 ## Next Steps
 
-- Read the full [README.md](README.md) for detailed documentation
-- Check [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md) for architecture details
-- Run evaluation scripts to test on your own datasets
-- Customize detection thresholds and redaction settings
+1. **Review comparison results** in `comparison_results.json`
+2. **Document findings** for your project report
+3. **Deploy best model** if custom model is better
+4. **Update application** to use the chosen model
 
-## Common Use Cases
+## For Project Report
 
-### Journalism
-Protect identities in photos before publication
+You can state:
 
-### Social Media
-Automatically redact faces in group photos
+> "We implemented a custom YOLOv8 training pipeline using the Ultralytics API to train license plate detection models locally. After training for 85 epochs with the same configuration as Roboflow (512×512 images, batch size 16, SGD optimizer), we compared our custom model with Roboflow's model on the test set. Our custom model achieved [X]% mAP@50, [Y]% precision, and [Z]% recall, compared to Roboflow's 97.7% mAP@50, 98.6% precision, and 95.4% recall. Based on this comparison, we chose to use [Roboflow/Custom] model for production because [reason]."
 
-### Law Enforcement
-Anonymize evidence photos and videos
+## Full Documentation
 
-### Research
-De-identify datasets while preserving spatial information
-
-### Real Estate
-Blur faces and license plates in property photos
+- **Training details**: See `TRAINING_COMPARISON.md`
+- **Preprocessing**: See `PREPROCESSING_GUIDE.md`
+- **Implementation**: See `IMPLEMENTATION_SUMMARY.md`
 
 ---
 
-Need help? Check the troubleshooting section in README.md or open an issue on GitHub.
-
+**Ready to train?** Run: `python train_custom.py --data datasets/license_plates/data.yaml`
 

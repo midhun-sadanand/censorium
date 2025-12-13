@@ -23,17 +23,17 @@ def print_header(text):
 
 def print_success(text):
     """Print success message"""
-    print(f"{GREEN}✓ {text}{RESET}")
+    print(f"{GREEN}SUCCESS: {text}{RESET}")
 
 
 def print_error(text):
     """Print error message"""
-    print(f"{RED}✗ {text}{RESET}")
+    print(f"{RED}ERROR: {text}{RESET}")
 
 
 def print_warning(text):
     """Print warning message"""
-    print(f"{YELLOW}⚠ {text}{RESET}")
+    print(f"{YELLOW}WARNING: {text}{RESET}")
 
 
 def check_python_version():
@@ -245,7 +245,7 @@ def generate_report(results):
     
     if failed == 0:
         print(f"{GREEN}{'='*60}")
-        print("✓ ALL CHECKS PASSED - System is ready!")
+        print("ALL CHECKS PASSED - System is ready!")
         print(f"{'='*60}{RESET}")
         print()
         print("Next steps:")
@@ -254,7 +254,7 @@ def generate_report(results):
         print("3. Open http://localhost:3000")
     else:
         print(f"{RED}{'='*60}")
-        print("✗ SOME CHECKS FAILED - Please fix issues above")
+        print("ERROR: SOME CHECKS FAILED - Please fix issues above")
         print(f"{'='*60}{RESET}")
         print()
         print("Common fixes:")

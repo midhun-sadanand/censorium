@@ -14,26 +14,26 @@ def test_health():
         response = requests.get(f"{API_URL}/health", timeout=5)
         if response.status_code == 200:
             data = response.json()
-            print("✓ Health check passed")
+            print("Health check passed")
             print(f"  Status: {data['status']}")
             print(f"  Models loaded: {data['models_loaded']}")
             return True
         else:
-            print(f"✗ Health check failed: {response.status_code}")
+            print(f"ERROR: Health check failed: {response.status_code}")
             return False
     except requests.exceptions.ConnectionError:
-        print("✗ Cannot connect to API. Is it running?")
+        print("ERROR: Cannot connect to API. Is it running?")
         print(f"  Try: cd backend && python -m uvicorn app.main:app")
         return False
     except Exception as e:
-        print(f"✗ Health check error: {e}")
+        print(f"ERROR: Health check error: {e}")
         return False
 
 
 def test_redact_image(image_path: str):
     """Test image redaction endpoint"""
     if not Path(image_path).exists():
-        print(f"✗ Image not found: {image_path}")
+        print(f"ERROR: Image not found: {image_path}")
         return False
     
     try:
@@ -54,7 +54,7 @@ def test_redact_image(image_path: str):
         
         if response.status_code == 200:
             result = response.json()
-            print("✓ Redaction test passed")
+            print("Redaction test passed")
             print(f"  Detections: {len(result['detections'])}")
             print(f"  Processing time: {result['processing_time_ms']:.0f}ms")
             
@@ -64,11 +64,11 @@ def test_redact_image(image_path: str):
             print(f"  Faces: {faces}, Plates: {plates}")
             return True
         else:
-            print(f"✗ Redaction test failed: {response.status_code}")
+            print(f"ERROR: Redaction test failed: {response.status_code}")
             print(f"  {response.text}")
             return False
     except Exception as e:
-        print(f"✗ Redaction test error: {e}")
+        print(f"ERROR: Redaction test error: {e}")
         return False
 
 
@@ -78,16 +78,16 @@ def test_stats():
         response = requests.get(f"{API_URL}/stats", timeout=5)
         if response.status_code == 200:
             data = response.json()
-            print("✓ Stats endpoint passed")
+            print("Stats endpoint passed")
             print(f"  Status: {data['status']}")
             print(f"  Supported modes: {', '.join(data['supported_modes'])}")
             print(f"  Supported entities: {', '.join(data['supported_entities'])}")
             return True
         else:
-            print(f"✗ Stats endpoint failed: {response.status_code}")
+            print(f"ERROR: Stats endpoint failed: {response.status_code}")
             return False
     except Exception as e:
-        print(f"✗ Stats endpoint error: {e}")
+        print(f"ERROR: Stats endpoint error: {e}")
         return False
 
 

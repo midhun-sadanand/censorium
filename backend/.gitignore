@@ -17,7 +17,3 @@ models/*.pth
 .pytest_cache/
 .coverage
 htmlcov/
-
-
-
-

@@ -1,17 +1,17 @@
 # Styling Quick Start Guide
 
-## 🎨 What Changed?
+## What Changed?
 
 Your Censorium frontend has been completely restyled with a modern dark theme inspired by the design images you provided.
 
-## ✅ Summary of Changes
+## Summary of Changes
 
 ### Visual Design
-- ✨ **Dark theme** with sophisticated brown-black color palette
-- 🎯 **Sidebar navigation** with collapsible menu
-- 🔤 **Custom Cursor Gothic fonts** for professional typography
-- 🎴 **Card-based layouts** with improved visual hierarchy
-- 🌊 **Smooth transitions** and hover effects
+- **Dark theme** with sophisticated brown-black color palette
+- **Sidebar navigation** with collapsible menu
+- **Custom Cursor Gothic fonts** for professional typography
+- **Card-based layouts** with improved visual hierarchy
+- **Smooth transitions** and hover effects
 
 ### Color Palette
 ```
@@ -23,7 +23,7 @@ Text:         #e5e5e5 (light gray)
 Interactive:  #4a90e2 (blue)
 ```
 
-## 🚀 Running the Application
+## Running the Application
 
 Start the frontend development server:
 
@@ -34,7 +34,7 @@ npm run dev
 
 Then open http://localhost:3000 in your browser.
 
-## 📁 Modified Files
+## Modified Files
 
 1. **`/frontend/app/globals.css`**
    - Added Cursor Gothic font declarations
@@ -59,7 +59,7 @@ Then open http://localhost:3000 in your browser.
 5. **`/frontend/public/fonts/`**
    - Added 4 Cursor Gothic font files (Regular, Bold, Italic, Bold Italic)
 
-## 🎯 Key Features
+## Key Features
 
 ### Collapsible Sidebar
 - Click the arrow button at the bottom of sidebar to collapse/expand
@@ -83,7 +83,7 @@ Then open http://localhost:3000 in your browser.
 - Yellow dot: Checking connection
 - Located in sidebar footer
 
-## 🎨 Customization
+## Customization
 
 All colors are defined in `/frontend/app/globals.css` using CSS variables:
 
@@ -103,7 +103,7 @@ All colors are defined in `/frontend/app/globals.css` using CSS variables:
 
 To change colors, simply modify these variables in `globals.css`.
 
-## 🔍 Testing Checklist
+## Testing Checklist
 
 After starting the dev server, verify:
 
@@ -117,7 +117,7 @@ After starting the dev server, verify:
 - [ ] Download button functions
 - [ ] All hover effects work smoothly
 
-## 📦 Build for Production
+## Build for Production
 
 To create a production build:
 
@@ -126,9 +126,9 @@ cd /Users/midhu1/Projects/censorium/frontend
 npm run build
 ```
 
-The build was already tested and completed successfully! ✅
+The build was already tested and completed successfully!
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Fonts not loading?
 1. Check that fonts are in `/frontend/public/fonts/`
@@ -145,13 +145,13 @@ The build was already tested and completed successfully! ✅
 2. Restart dev server
 3. Check browser console for errors
 
-## 📚 Documentation
+## Documentation
 
 For more details, see:
 - **STYLING_CHANGES.md** - Complete technical documentation
 - **DESIGN_COMPARISON.md** - Before/after comparison and design decisions
 
-## 🎉 Next Steps
+## Next Steps
 
 Your frontend is ready to use! The styling is production-ready and fully functional. Simply start the dev server and begin using the application.
 
@@ -162,9 +162,9 @@ If you want to make adjustments:
 
 ---
 
-**Status**: ✅ Complete  
+**Status**: Complete  
 **Version**: 2.0.0  
 **Date**: November 24, 2025
 
-Enjoy your newly styled Censorium! 🎨✨
+Enjoy your newly styled Censorium!
 

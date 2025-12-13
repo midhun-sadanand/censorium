@@ -1,8 +1,10 @@
 # YOLOv8 License Plate Detection Training Pipeline
 
-Complete training pipeline for replicating the Roboflow license plate detection model.
+Complete training pipeline for replicating and comparing with the Roboflow license plate detection model.
 
 ## Quick Start
+
+### Option 1: Custom Training Script (Recommended)
 
 ```bash
 # Dataset is already extracted at: datasets/license_plates/
@@ -11,7 +13,26 @@ Complete training pipeline for replicating the Roboflow license plate detection 
 # 1. Verify dataset
 python verify_preprocessing.py
 
-# 2. Train model (use ultralytics CLI for simplicity)
+# 2. Train custom model (programmatic, matches Roboflow config)
+python train_custom.py --data datasets/license_plates/data.yaml
+
+# 3. Compare with Roboflow model
+python compare_models.py \
+  --custom runs/detect/custom_train/weights/best.pt \
+  --roboflow ../models/license_plate.pt \
+  --data datasets/license_plates/data.yaml
+
+# 4. Deploy best model
+python deploy_model.py --model runs/detect/custom_train/weights/best.pt --name custom
+```
+
+### Option 2: Ultralytics CLI (Alternative)
+
+```bash
+# 1. Verify dataset
+python verify_preprocessing.py
+
+# 2. Train model (use ultralytics CLI)
 yolo detect train \
   data=datasets/license_plates/data.yaml \
   model=yolov8n.pt \
@@ -28,12 +49,12 @@ yolo detect val \
   data=datasets/license_plates/data.yaml
 
 # 4. Deploy if successful
-cp runs/detect/license_plate_train/weights/best.pt ../models/license_plate.pt
+python deploy_model.py --model runs/detect/license_plate_train/weights/best.pt --name custom
 ```
 
 ## What's Been Done
 
-### ✅ Completed Setup
+### Completed Setup
 
 1. **Dataset Extracted**: 24,011 images in YOLOv8 format
    - Train: 20,943 images (with 3x augmentation)
@@ -68,11 +89,35 @@ cp runs/detect/license_plate_train/weights/best.pt ../models/license_plate.pt
 - Precision: 98.6%
 - Recall: 95.4%
 
-## Training Commands
+## Training Methods
 
-###  Recommended: Use Ultralytics CLI
+### Method 1: Custom Training Script (Recommended)
 
-The simplest way to train matching Roboflow configuration:
+The `train_custom.py` script provides programmatic training with better integration:
+
+```bash
+# Standard training (85 epochs, matches Roboflow)
+python train_custom.py --data datasets/license_plates/data.yaml
+
+# Quick test (1 epoch)
+python train_custom.py --data datasets/license_plates/data.yaml --epochs 1 --batch 4
+
+# GPU training (faster)
+python train_custom.py --data datasets/license_plates/data.yaml --device cuda --batch 32
+
+# Resume training
+python train_custom.py --data datasets/license_plates/data.yaml --resume runs/detect/custom_train/weights/last.pt
+```
+
+**Advantages:**
+- Better integration with codebase
+- Automatic validation after training
+- Saves training summary and metrics
+- Easier to customize and extend
+
+### Method 2: Ultralytics CLI
+
+The traditional CLI approach (also works):
 
 ```bash
 # Standard training (85 epochs, matches Roboflow)
@@ -133,21 +178,21 @@ yolo detect predict \
 ```
 training/
 ├── datasets/
-│   └── license_plates/          # ✅ Extracted dataset
-│       ├── data.yaml             # ✅ YOLOv8 config
-│       ├── train/ (20,943)       # ✅ Training data
-│       ├── valid/ (2,048)        # ✅ Validation data
-│       └── test/ (1,020)         # ✅ Test data
+│   └── license_plates/          # Extracted dataset
+│       ├── data.yaml             # YOLOv8 config
+│       ├── train/ (20,943)       # Training data
+│       ├── valid/ (2,048)        # Validation data
+│       └── test/ (1,020)         # Test data
 ├── runs/
 │   └── detect/                   # Training outputs
 │       └── license_plate_train/
 │           ├── weights/
 │           │   ├── best.pt       # Best model
-│           │   └── last.pt       # Latest checkpoint
+│           │   └── last.pt      # Latest checkpoint
 │           └── results.png       # Training curves
-├── yolov8n.pt                    # ✅ COCO pretrained model
-├── verify_preprocessing.py       # ✅ Dataset verification
-└── README.md                     # ✅ This file
+├── yolov8n.pt                    # COCO pretrained model
+├── verify_preprocessing.py       # Dataset verification
+└── README.md                     # This file
 ```
 
 ## Troubleshooting
@@ -184,11 +229,30 @@ The face detection model uses **pretrained MTCNN** and does not require training
 
 ## Next Steps After Training
 
-1. **Check metrics** in `runs/detect/license_plate_train/results.csv`
+1. **Check metrics** in `runs/detect/custom_train/results.csv` (or `license_plate_train/` if using CLI)
 2. **View training curves** in `results.png`
-3. **Validate on test set** using `yolo detect val`
-4. **Compare to baseline** (Roboflow model: 97.7% mAP@50)
-5. **Deploy if successful**: Copy `best.pt` to `../models/license_plate.pt`
+3. **Compare with Roboflow** using `compare_models.py`
+4. **Deploy best model** using `deploy_model.py`
+5. **Update application** to use the better-performing model
+
+## Model Comparison
+
+After training, compare your custom model with Roboflow:
+
+```bash
+python compare_models.py \
+  --custom runs/detect/custom_train/weights/best.pt \
+  --roboflow ../models/license_plate.pt \
+  --data datasets/license_plates/data.yaml
+```
+
+This will:
+- Evaluate both models on the test set
+- Compare accuracy metrics (mAP, precision, recall)
+- Benchmark inference speed
+- Generate a comparison report
+
+See `TRAINING_COMPARISON.md` for detailed comparison guide.
 
 ## Training Configuration (Matches Roboflow)
 
@@ -246,6 +310,9 @@ See `PREPROCESSING_GUIDE.md` for details.
 |--------|---------|-------|
 | `verify_preprocessing.py` | Verify dataset is correctly preprocessed | `python verify_preprocessing.py` |
 | `preprocess_dataset.py` | Process raw images (Roboflow pipeline) | `python preprocess_dataset.py --input-dir raw_data` |
+| `train_custom.py` | **Custom training pipeline** (programmatic) | `python train_custom.py --data datasets/license_plates/data.yaml` |
+| `compare_models.py` | **Compare custom vs Roboflow models** | `python compare_models.py --custom best.pt --roboflow ../models/license_plate.pt` |
+| `deploy_model.py` | **Deploy trained model to models directory** | `python deploy_model.py --model best.pt --name custom` |
 
 ## Support
 
@@ -262,9 +329,9 @@ See `PREPROCESSING_GUIDE.md` for details.
 
 ---
 
-**Status:** ✅ Ready for Training  
-**Dataset:** ✅ Verified (24,011 images)  
-**Model:** ✅ Downloaded (yolov8n.pt)  
-**Scripts:** ✅ Preprocessing + Verification available  
+**Status:** Ready for Training  
+**Dataset:** Verified (24,011 images)  
+**Model:** Downloaded (yolov8n.pt)  
+**Scripts:** Preprocessing + Verification available  
 **Next:** Run training command above
 
