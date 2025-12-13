@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Settings from '@geist-ui/icons/settings';
-import Archive from '@geist-ui/icons/archive';
 import Upload from '@geist-ui/icons/upload';
 
 interface SidebarProps {
@@ -78,30 +77,6 @@ export default function Sidebar({ apiStatus }: SidebarProps) {
             >
               <Upload size={20} />
               {sidebarOpen && <span className="text-sm font-medium">Upload</span>}
-            </Link>
-
-            <Link 
-              href="/report"
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
-                pathname === '/report' ? 'bg-opacity-100' : 'hover:bg-opacity-50'
-              }`}
-              style={pathname === '/report'
-                ? { background: 'var(--color-bg-tertiary)', color: 'var(--color-text-primary)' }
-                : { color: 'var(--color-text-secondary)' }
-              }
-              onMouseEnter={(e) => {
-                if (pathname !== '/report') {
-                  e.currentTarget.style.background = 'var(--color-bg-tertiary)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (pathname !== '/report') {
-                  e.currentTarget.style.background = 'transparent';
-                }
-              }}
-            >
-              <Archive size={20} />
-              {sidebarOpen && <span className="text-sm font-medium">Report</span>}
             </Link>
 
             <button 
