@@ -33,7 +33,7 @@ cp runs/detect/license_plate_train/weights/best.pt ../models/license_plate.pt
 
 ## What's Been Done
 
-### ✅ Completed Setup
+### Completed Setup
 
 1. **Dataset Extracted**: 24,011 images in YOLOv8 format
    - Train: 20,943 images (with 3x augmentation)
@@ -133,11 +133,11 @@ yolo detect predict \
 ```
 training/
 ├── datasets/
-│   └── license_plates/          # ✅ Extracted dataset
-│       ├── data.yaml             # ✅ YOLOv8 config
-│       ├── train/ (20,943)       # ✅ Training data
-│       ├── valid/ (2,048)        # ✅ Validation data
-│       └── test/ (1,020)         # ✅ Test data
+│   └── license_plates/          # Extracted dataset
+│       ├── data.yaml             # YOLOv8 config
+│       ├── train/ (20,943)       # Training data
+│       ├── valid/ (2,048)        # Validation data
+│       └── test/ (1,020)         # Test data
 ├── runs/
 │   └── detect/                   # Training outputs
 │       └── license_plate_train/
@@ -145,9 +145,9 @@ training/
 │           │   ├── best.pt       # Best model
 │           │   └── last.pt       # Latest checkpoint
 │           └── results.png       # Training curves
-├── yolov8n.pt                    # ✅ COCO pretrained model
-├── verify_preprocessing.py       # ✅ Dataset verification
-└── README.md                     # ✅ This file
+├── yolov8n.pt                    # COCO pretrained model
+├── verify_preprocessing.py       # Dataset verification
+└── README.md                     # This file
 ```
 
 ## Troubleshooting
@@ -262,9 +262,9 @@ See `PREPROCESSING_GUIDE.md` for details.
 
 ---
 
-**Status:** ✅ Ready for Training  
-**Dataset:** ✅ Verified (24,011 images)  
-**Model:** ✅ Downloaded (yolov8n.pt)  
-**Scripts:** ✅ Preprocessing + Verification available  
+**Status:** Ready for Training  
+**Dataset:** Verified (24,011 images)  
+**Model:** Downloaded (yolov8n.pt)  
+**Scripts:** Preprocessing + Verification available  
 **Next:** Run training command above
 

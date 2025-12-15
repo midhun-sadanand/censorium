@@ -231,24 +231,7 @@ python verify_preprocessing.py
 
 Expected: All images 512×512, labels valid, dataset structure correct.
 
-#### Train Model
-
-**Option 1: Custom Training Script (Recommended)**
-```bash
-cd backend/training
-source ../../venv/bin/activate
-
-# Full training (85 epochs, ~2-4 hours on CPU)
-python train_custom.py --data datasets/license_plates/data.yaml
-
-# Quick test (1 epoch, ~10 minutes)
-python train_custom.py --data datasets/license_plates/data.yaml --epochs 1 --batch 4
-
-# GPU training (if available)
-python train_custom.py --data datasets/license_plates/data.yaml --device cuda --batch 32
-```
-
-**Option 2: Ultralytics CLI**
+#### Train Model (Ultralytics CLI)
 ```bash
 cd backend/training
 source ../../venv/bin/activate
@@ -270,7 +253,7 @@ yolo detect train \
 
 #### Monitor Training
 
-Training outputs saved to `runs/detect/custom_train/` (or `license_plate_train/`):
+Training outputs are saved to `backend/training/runs/detect/license_plate_train/`:
 - `weights/best.pt`: Best model checkpoint
 - `weights/last.pt`: Latest checkpoint (for resuming)
 - `results.png`: Training curves
@@ -278,57 +261,61 @@ Training outputs saved to `runs/detect/custom_train/` (or `license_plate_train/`
 
 View progress:
 ```bash
-open runs/detect/custom_train/results.png  # Mac
+cd backend/training
+open runs/detect/license_plate_train/results.png  # Mac
 # Or navigate to the file in your file manager
 ```
 
 #### Resume Training
 
 ```bash
-python train_custom.py \
-  --data datasets/license_plates/data.yaml \
-  --resume runs/detect/custom_train/weights/last.pt
+cd backend/training
+source ../../venv/bin/activate
+yolo detect train \
+  data=datasets/license_plates/data.yaml \
+  model=runs/detect/license_plate_train/weights/last.pt \
+  epochs=85 \
+  imgsz=512 \
+  batch=16 \
+  device=cpu \
+  project=runs/detect \
+  name=license_plate_train \
+  resume
 ```
 
 #### Validate Trained Model
 
 ```bash
-# Using custom script (automatic after training)
-# Or manually:
+cd backend/training
+source ../../venv/bin/activate
 yolo detect val \
-  model=runs/detect/custom_train/weights/best.pt \
+  model=runs/detect/license_plate_train/weights/best.pt \
   data=datasets/license_plates/data.yaml
 ```
 
 #### Deploy Trained Model
 
+After you are satisfied with the results, copy the best checkpoint into the backend models directory:
+
 ```bash
 cd backend/training
-source ../../venv/bin/activate
-python deploy_model.py \
-  --model runs/detect/custom_train/weights/best.pt \
-  --name custom
+cp runs/detect/license_plate_train/weights/best.pt ../models/license_plate.pt
 ```
-
-This copies the model to `backend/models/license_plate_custom.pt`.
-
-#### Compare Models
-
-```bash
-python compare_models.py \
-  --custom runs/detect/custom_train/weights/best.pt \
-  --roboflow ../models/license_plate.pt \
-  --data datasets/license_plates/data.yaml
-```
-
-Generates comparison report with metrics and speed benchmarks.
 
 ### Training Troubleshooting
 
 **Out of memory:**
 ```bash
 # Reduce batch size
-python train_custom.py --data datasets/license_plates/data.yaml --batch 4
+yolo detect train \
+  data=datasets/license_plates/data.yaml \
+  model=yolov8n.pt \
+  epochs=85 \
+  imgsz=512 \
+  batch=4 \
+  device=cpu \
+  project=runs/detect \
+  name=license_plate_train
 ```
 
 **Training too slow:**
@@ -466,13 +453,10 @@ censorium/
 │   │   ├── evaluate_plate.py    # Plate detection evaluation
 │   │   └── benchmark.py         # Performance benchmarks
 │   ├── training/
-│   │   ├── train_custom.py     # Custom training script
-│   │   ├── compare_models.py    # Model comparison tool
-│   │   ├── deploy_model.py      # Model deployment helper
 │   │   ├── verify_preprocessing.py  # Dataset verification
 │   │   ├── preprocess_dataset.py    # Preprocessing pipeline
-│   │   ├── datasets/            # Training datasets
-│   │   └── README.md            # Training documentation
+│   │   ├── datasets/                # Training datasets
+│   │   └── README.md                # Training documentation
 │   ├── models/                  # Model weights (gitignored)
 │   ├── run_redaction.py         # CLI tool
 │   ├── test_api.py              # API tests

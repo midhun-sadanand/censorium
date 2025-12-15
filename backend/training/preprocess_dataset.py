@@ -279,7 +279,7 @@ def process_dataset(
         try:
             preprocessed_image = preprocess_image(img_path, target_size)
         except Exception as e:
-            print(f"\n⚠️  Error processing {img_path.name}: {e}")
+            print(f"\nWarning: error processing {img_path.name}: {e}")
             continue
         
         # Save original preprocessed image
@@ -314,7 +314,7 @@ def process_dataset(
                 
                 total_output += 1
     
-    print(f"\n✅ {split.upper()} complete:")
+    print(f"\n{split.upper()} complete:")
     print(f"   Input: {len(image_files)} images")
     print(f"   Output: {total_output} images")
     if apply_augmentation:
@@ -347,7 +347,7 @@ roboflow:
     with open(data_yaml_path, 'w') as f:
         f.write(data_yaml_content)
     
-    print(f"\n✅ Created data.yaml at {data_yaml_path}")
+    print(f"\nCreated data.yaml at {data_yaml_path}")
 
 
 def main():
@@ -425,7 +425,7 @@ def main():
     
     # Validate input directory
     if not input_dir.exists():
-        print(f"\n❌ Error: Input directory not found: {input_dir}")
+        print(f"\nError: input directory not found: {input_dir}")
         sys.exit(1)
     
     # Create output directory
@@ -437,12 +437,12 @@ def main():
         output_split_dir = output_dir / split
         
         if not input_split_dir.exists():
-            print(f"\n⚠️  Warning: {split} split not found, skipping")
+            print(f"\nWarning: {split} split not found, skipping")
             continue
         
         # Check if images and labels directories exist
         if not (input_split_dir / "images").exists():
-            print(f"\n⚠️  Warning: {split}/images not found, skipping")
+            print(f"\nWarning: {split}/images not found, skipping")
             continue
         
         # Apply augmentation only to training set
@@ -461,7 +461,7 @@ def main():
     create_data_yaml(output_dir, args.class_names)
     
     print(f"\n{'='*70}")
-    print(f"✅ PREPROCESSING COMPLETE!")
+    print("PREPROCESSING COMPLETE.")
     print(f"{'='*70}")
     print(f"\nOutput Location: {output_dir.absolute()}")
     print(f"\nDirectory Structure:")

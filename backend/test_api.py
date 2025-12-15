@@ -14,7 +14,7 @@ def test_health():
         response = requests.get(f"{API_URL}/health", timeout=5)
         if response.status_code == 200:
             data = response.json()
-            print("✓ Health check passed")
+            print("Health check passed.")
             print(f"  Status: {data['status']}")
             print(f"  Models loaded: {data['models_loaded']}")
             return True
@@ -54,7 +54,7 @@ def test_redact_image(image_path: str):
         
         if response.status_code == 200:
             result = response.json()
-            print("✓ Redaction test passed")
+            print("Redaction test passed.")
             print(f"  Detections: {len(result['detections'])}")
             print(f"  Processing time: {result['processing_time_ms']:.0f}ms")
             
@@ -78,7 +78,7 @@ def test_stats():
         response = requests.get(f"{API_URL}/stats", timeout=5)
         if response.status_code == 200:
             data = response.json()
-            print("✓ Stats endpoint passed")
+            print("Stats endpoint passed.")
             print(f"  Status: {data['status']}")
             print(f"  Supported modes: {', '.join(data['supported_modes'])}")
             print(f"  Supported entities: {', '.join(data['supported_entities'])}")
