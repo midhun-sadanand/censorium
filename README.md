@@ -4,6 +4,11 @@
 
 Censorium is a complete image redaction system that automatically detects and obscures faces and license plates in images. Built with PyTorch, FastAPI, and Next.js, it provides both a web interface and CLI tool for privacy-preserving image processing.
 
+## License Plate Training Dataset
+
+- **Download**: If you want to obtain the license plate training dataset used for this project, you can access it here: [`Google Drive dataset link`](https://drive.google.com/drive/u/0/folders/1pIyvvq500rL2o8d7HqcI4PXJHNo-AQXt).
+- **Placement**: After downloading, place the folder named `training` directly inside the `backend` directory of this repository so that the final path is `backend/training/`.
+
 ## Quick Start
 
 ### Prerequisites
